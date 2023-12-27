@@ -12,6 +12,20 @@ for %%i in ("%oz_directory%\*.oz") do (
     ozc -c "%%~fi"
 )
 
+REM Check if there is only one file
+for /f %%i in ('dir /b /a-d "%oz_directory%\*.ozf" ^| find /c /v ""') do (
+    set "file_count=%%i"
+)
+
+REM If there's only one file, run it automatically
+if %file_count% equ 1 (
+    for %%i in ("%oz_directory%\*.ozf") do (
+        ozengine "%%~fi"
+    )
+    exit /b
+)
+
+
 REM List compiled .ozf files with numbers
 set "counter=0"
 echo Compiled Oz files:
